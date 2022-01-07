@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,10 +14,12 @@ import lombok.Setter;
 @Setter
 public class BillingAddressModel
 {
-    private String email;
+    private int billingId;
+    private Integer customerId;
     private String Line_1;
     private String Line_2;
     private int postalCode;
     private String city;
     private String state;
+
 }
