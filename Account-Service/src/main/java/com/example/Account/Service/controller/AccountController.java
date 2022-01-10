@@ -19,7 +19,7 @@ public class AccountController {
     public AccountService accountService;
 
     @PostMapping("/add")
-    public Registration addVal(@Valid @RequestBody RegistrationModel registrationModel)
+    public String addVal(@Valid @RequestBody RegistrationModel registrationModel)
     {
         return accountService.add(registrationModel);
 

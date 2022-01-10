@@ -11,6 +11,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.datatransfer.FlavorListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,30 +21,40 @@ public class AccountService {
     public RegistrationRepo registrationRepo;
 
 
-    public Registration add(RegistrationModel registrationModel)
-    {
-        Registration reg = new Registration();
-        reg.setId(registrationModel.getId());
-        reg.setName(registrationModel.getName());
-        reg.setEmail(registrationModel.getEmail());
-        reg.setMobile_number(registrationModel.getMobile_number());
+    public String add(RegistrationModel registrationModel) {
+        List<Registration> ema = registrationRepo.findAll();
+        if(!registrationRepo.existsByEmail(registrationModel.getEmail())){
+            Registration reg = new Registration();
 
-        //******Password Encryption ********//
-        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
-        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        config.setPassword("cjss_encryption"); // encryptor's private key
-        config.setAlgorithm("PBEWithMD5AndDES");
-        config.setKeyObtentionIterations("1000");
-        config.setPoolSize("1");
-        config.setProviderName("SunJCE");
-        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
-        config.setStringOutputType("base64");
-        encryptor.setConfig(config);
-        String encryptedData = encryptor.encrypt(registrationModel.getPassword());
-        reg.setPassword(encryptedData);
+            reg.setId(registrationModel.getId());
+            reg.setName(registrationModel.getName());
+            reg.setEmail(registrationModel.getEmail());
+            reg.setMobile_number(registrationModel.getMobile_number());
 
-        return registrationRepo.save(reg);
+            //******Password Encryption ********//
+            PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+            SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+            config.setPassword("cjss_encryption"); // encryptor's private key
+            config.setAlgorithm("PBEWithMD5AndDES");
+            config.setKeyObtentionIterations("1000");
+            config.setPoolSize("1");
+            config.setProviderName("SunJCE");
+            config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+            config.setStringOutputType("base64");
+            encryptor.setConfig(config);
+            String encryptedData = encryptor.encrypt(registrationModel.getPassword());
+            reg.setPassword(encryptedData);
+
+            registrationRepo.save(reg);
+
+            return "User Added";
+        }
+
+        return "User Already exist";
     }
+
+
+
     public List<RegistrationModel> get()
     {
         List<Registration> reg = registrationRepo.findAll();
@@ -69,10 +80,4 @@ public class AccountService {
         regModel.setPassword(obj);
         return regModel;
     }
-
-
-
-
-
-
 }
