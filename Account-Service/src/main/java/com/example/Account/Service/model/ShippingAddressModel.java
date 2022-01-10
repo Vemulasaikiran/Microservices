@@ -12,10 +12,13 @@ import lombok.Setter;
 @Setter
 public class ShippingAddressModel
 {
-    private String email;
+    private int shippingId;
+    private int customerId;
     private String Line_1;
     private String Line_2;
     private int postalCode;
     private String city;
     private String state;
+
+
 }

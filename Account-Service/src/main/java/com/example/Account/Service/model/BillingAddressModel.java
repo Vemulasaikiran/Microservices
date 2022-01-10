@@ -16,8 +16,8 @@ public class BillingAddressModel
 {
     private int billingId;
     private Integer customerId;
-    private String Line_1;
-    private String Line_2;
+    private String line_1;
+    private String line_2;
     private int postalCode;
     private String city;
     private String state;

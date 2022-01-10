@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class ShippingAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int billingId;
+    private int shippingId;
     @Column
     private int customerId;
     @Column

@@ -19,9 +19,9 @@ public class BillingAddress {
     @Column
     private Integer customerId;
     @Column
-    private String Line_1;
+    private String line_1;
     @Column
-    private String Line_2;
+    private String line_2;
     @Column
     private int postalCode;
     @Column
