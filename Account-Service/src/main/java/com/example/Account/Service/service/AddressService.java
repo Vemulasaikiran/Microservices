@@ -4,12 +4,10 @@ import com.example.Account.Service.entity.BillingAddress;
 import com.example.Account.Service.entity.Registration;
 import com.example.Account.Service.entity.ShippingAddress;
 import com.example.Account.Service.model.BillingAddressModel;
-import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.model.ShippingAddressModel;
 import com.example.Account.Service.repository.BillingRepo;
 import com.example.Account.Service.repository.RegistrationRepo;
 import com.example.Account.Service.repository.ShippingRepo;
-import org.hibernate.usertype.LoggableUserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,13 +56,11 @@ public class AddressService {
         List<BillingAddress> add= billingRepo.findAll();
        return add.stream().map(this::billingConversion).collect(Collectors.toList());
     }
-
     public List<ShippingAddressModel> getShipping()
     {
         List<ShippingAddress> ship = shippingRepo.findAll();
         return ship.stream().map(this::shippingConversion).collect(Collectors.toList());
     }
-
     public ShippingAddressModel shippingConversion(ShippingAddress shp)
     {
         return new ShippingAddressModel(shp.getShippingId(),shp.getCustomerId(), shp.getLine_1(),
@@ -83,14 +79,12 @@ public class AddressService {
     {
         List allDetails = new ArrayList();
         Optional<Registration> reg = registrationRepo.findById(id);
-        allDetails.add(reg.stream().map(t->accountService.conversion(t)).collect(Collectors.toList()));
+        allDetails.add(reg.stream().map(t->accountService.registrationConversion(t)).collect(Collectors.toList()));
         List<BillingAddress> bill = billingRepo.findByCustomerId(id);
         allDetails.add(bill.stream().map(this::billingConversion).collect(Collectors.toList()));
         List<ShippingAddress> ship = shippingRepo.findByCustomerId(id);
-        allDetails.add(ship.stream().map(r->shippingConversion(r)).collect(Collectors.toList()));
+        allDetails.add(ship.stream().map(this::shippingConversion).collect(Collectors.toList()));
 
         return allDetails;
-
-
     }
 }

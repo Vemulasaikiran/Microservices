@@ -1,17 +1,13 @@
 package com.example.Account.Service.service;
 
-import com.example.Account.Service.entity.BillingAddress;
 import com.example.Account.Service.entity.Registration;
-import com.example.Account.Service.model.BillingAddressModel;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.repository.RegistrationRepo;
-import org.apache.tomcat.jni.Address;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.datatransfer.FlavorListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,10 +54,10 @@ public class AccountService {
     public List<RegistrationModel> get()
     {
         List<Registration> reg = registrationRepo.findAll();
-        return reg.stream().map(this::conversion).collect(Collectors.toList());
+        return reg.stream().map(this::registrationConversion).collect(Collectors.toList());
     }
 
-    public RegistrationModel conversion(Registration registration)
+    public RegistrationModel registrationConversion(Registration registration)
     {
         RegistrationModel regModel = new RegistrationModel();
         regModel.setId(registration.getId());
