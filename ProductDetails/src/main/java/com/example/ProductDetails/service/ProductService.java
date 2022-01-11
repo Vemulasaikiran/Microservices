@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class productService
+public class ProductService
     {
         @Autowired
         private ProductRepo productRepo;
 
-        public ProductDetails add(ProductDetailsModel productModel)
+        public ProductDetails addProduct(ProductDetailsModel productModel)
         {
             ProductDetails details = new ProductDetails();
             details.setName(productModel.getName());
