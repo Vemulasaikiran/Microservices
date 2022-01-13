@@ -4,10 +4,7 @@ import com.example.Account.Service.entity.Registration;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,6 +26,12 @@ public class AccountController {
     public List<RegistrationModel> getVal()
     {
         return accountService.get();
+    }
+
+    @PostMapping("/login/{email}/{password}")
+    public String login(@PathVariable String email,@PathVariable String password)
+    {
+        return accountService.login(email,password);
     }
 
 }

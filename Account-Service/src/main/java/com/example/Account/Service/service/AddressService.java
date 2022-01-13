@@ -73,7 +73,6 @@ public class AddressService {
         return new BillingAddressModel(bill.getBillingId(),
                 bill.getCustomerId(),bill.getLine_1(),bill.getLine_2(),
                 bill.getPostalCode(),bill.getCity(),bill.getState());
-
     }
     public List getall(int id)
     {

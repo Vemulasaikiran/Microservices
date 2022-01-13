@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AccountService {
@@ -19,14 +20,13 @@ public class AccountService {
 
     public String add(RegistrationModel registrationModel) {
         List<Registration> ema = registrationRepo.findAll();
-        if(!registrationRepo.existsByEmail(registrationModel.getEmail())){
+        if (!registrationRepo.existsByEmail(registrationModel.getEmail())) {
             Registration reg = new Registration();
 
             reg.setId(registrationModel.getId());
             reg.setName(registrationModel.getName());
             reg.setEmail(registrationModel.getEmail());
             reg.setMobile_number(registrationModel.getMobile_number());
-
             //******Password Encryption ********//
             PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
             SimpleStringPBEConfig config = new SimpleStringPBEConfig();
@@ -50,15 +50,12 @@ public class AccountService {
     }
 
 
-
-    public List<RegistrationModel> get()
-    {
+    public List<RegistrationModel> get() {
         List<Registration> reg = registrationRepo.findAll();
         return reg.stream().map(this::registrationConversion).collect(Collectors.toList());
     }
 
-    public RegistrationModel registrationConversion(Registration registration)
-    {
+    public RegistrationModel registrationConversion(Registration registration) {
         RegistrationModel regModel = new RegistrationModel();
         regModel.setId(registration.getId());
         regModel.setName(registration.getName());
@@ -67,13 +64,38 @@ public class AccountService {
 
         //******Password Decryption  ********//
 
+//        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+//        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+//        config.setPassword("cjss_encryption"); // encryptor's private key
+//        config.setPoolSize("1");
+//        encryptor.setConfig(config);
+//        String obj = encryptor.decrypt(registration.getPassword());
+//
+//
+//        regModel.setPassword(obj);
+        return regModel;
+    }
+
+
+    public String login(String email, String password) {
+        Registration reg = (Registration) registrationRepo.findByEmail(email);
+
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword("cjss_encryption"); // encryptor's private key
         config.setPoolSize("1");
         encryptor.setConfig(config);
-        String obj = encryptor.decrypt(registration.getPassword());
-        regModel.setPassword(obj);
-        return regModel;
+
+
+        System.out.println(reg.getPassword());
+
+//        if(encryptor.decrypt(reg.getPassword()).equals(password))
+//        {
+//            return "Login Successful";
+//        }
+        return "Please check your Password";
+
     }
+
+
 }
