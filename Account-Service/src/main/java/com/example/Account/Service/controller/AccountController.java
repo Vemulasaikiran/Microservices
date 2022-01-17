@@ -1,6 +1,7 @@
 package com.example.Account.Service.controller;
 
 import com.example.Account.Service.entity.Registration;
+import com.example.Account.Service.model.LoginModel;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class AccountController {
         return accountService.add(registrationModel);
 
     }
+    @PostMapping("/login")
+    public String login(@RequestBody LoginModel loginModel)
+    {
+        return accountService.login(loginModel);
+    }
+
 
     @GetMapping("/get")
     public List<RegistrationModel> getVal()
@@ -28,10 +35,5 @@ public class AccountController {
         return accountService.get();
     }
 
-    @PostMapping("/login/{email}/{password}")
-    public String login(@PathVariable String email,@PathVariable String password)
-    {
-        return accountService.login(email,password);
-    }
 
 }

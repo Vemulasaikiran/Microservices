@@ -1,6 +1,7 @@
 package com.example.Account.Service.service;
 
 import com.example.Account.Service.entity.Registration;
+import com.example.Account.Service.model.LoginModel;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.repository.RegistrationRepo;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
@@ -19,7 +20,7 @@ public class AccountService {
 
 
     public String add(RegistrationModel registrationModel) {
-        List<Registration> ema = registrationRepo.findAll();
+//        List<Registration> ema = registrationRepo.findAll();
         if (!registrationRepo.existsByEmail(registrationModel.getEmail())) {
             Registration reg = new Registration();
 
@@ -27,6 +28,8 @@ public class AccountService {
             reg.setName(registrationModel.getName());
             reg.setEmail(registrationModel.getEmail());
             reg.setMobile_number(registrationModel.getMobile_number());
+
+
             //******Password Encryption ********//
             PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
             SimpleStringPBEConfig config = new SimpleStringPBEConfig();
@@ -77,25 +80,33 @@ public class AccountService {
     }
 
 
-    public String login(String email, String password) {
-        Registration reg = (Registration) registrationRepo.findByEmail(email);
-
-        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
-        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        config.setPassword("cjss_encryption"); // encryptor's private key
-        config.setPoolSize("1");
-        encryptor.setConfig(config);
+    public String login(LoginModel loginModel) {
+        if (registrationRepo.existsByEmail(loginModel.getEmail()))
+        {
 
 
-        System.out.println(reg.getPassword());
+            Registration reg = registrationRepo.findByEmail(loginModel.getEmail());
+            PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+            SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+            config.setPassword("cjss_encryption"); // encryptor's private key
+            config.setPoolSize("1");
+            encryptor.setConfig(config);
+            String pass = encryptor.decrypt(reg.getPassword());
 
+            if (loginModel.getPassword().equals(pass))
+            {
+                return "Logged In";
+            }
+            System.out.println(reg.getPassword());
+            System.out.println(pass);
+
+            return "Please check your Password";
+//
 //        if(encryptor.decrypt(reg.getPassword()).equals(password))
 //        {
 //            return "Login Successful";
 //        }
-        return "Please check your Password";
-
+        }
+        return "Please check your email Id";
     }
-
-
 }
