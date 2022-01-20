@@ -1,28 +1,26 @@
 package com.example.ProductDetails.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-@AllArgsConstructor
-@NoArgsConstructor
+
+@Entity
+@Table
 @Getter
 @Setter
-@Entity
-@Table(name = "productSku")
-
-public class ProductSku {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int inventoryId;
+    @Column
     private int productSkuId;
-
     @Column
-    private int productId;
-    @Column
-    private String specifications;
+    private int quantityAvailable;
 
 
 }

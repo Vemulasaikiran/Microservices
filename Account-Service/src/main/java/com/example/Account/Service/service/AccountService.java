@@ -97,15 +97,9 @@ public class AccountService {
             {
                 return "Logged In";
             }
-            System.out.println(reg.getPassword());
-            System.out.println(pass);
 
             return "Please check your Password";
-//
-//        if(encryptor.decrypt(reg.getPassword()).equals(password))
-//        {
-//            return "Login Successful";
-//        }
+
         }
         return "Please check your email Id";
     }
