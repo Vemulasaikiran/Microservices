@@ -45,7 +45,7 @@ public class InventoryService
 
 
                 List<Inventory> invo = inventoryRepo.findByproductSkuId(productSkuId);
-                invo.stream().forEach(i ->
+                invo.forEach(i ->
                 {
                     i.setQuantityAvailable(inventoryModel.getQuantityAvailable());
                     inventoryRepo.save(i);
@@ -54,10 +54,4 @@ public class InventoryService
             }
             return "Product Not Found";
         }
-
-
-
-
-
-
     }
