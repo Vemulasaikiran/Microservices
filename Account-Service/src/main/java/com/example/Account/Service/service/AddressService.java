@@ -29,6 +29,7 @@ public class AddressService {
 
     public BillingAddress addBilling(BillingAddressModel billingAddressModel,int customerId)
     {
+//        if(accountService.login)
         BillingAddress bAdd= new BillingAddress();
         bAdd.setCustomerId(customerId);
         bAdd.setLine_1(billingAddressModel.getLine_1());

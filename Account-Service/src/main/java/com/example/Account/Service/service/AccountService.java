@@ -4,11 +4,18 @@ import com.example.Account.Service.entity.Registration;
 import com.example.Account.Service.model.LoginModel;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.repository.RegistrationRepo;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +24,8 @@ import java.util.stream.Stream;
 public class AccountService {
     @Autowired
     public RegistrationRepo registrationRepo;
+//    @Autowired
+//    public AddressService addressService;
 
 
     public String add(RegistrationModel registrationModel) {
@@ -80,7 +89,8 @@ public class AccountService {
     }
 
 
-    public String login(LoginModel loginModel) {
+    public ResponseEntity<String> login(LoginModel loginModel) {
+        int EXPIRATION = 1000*60*60*1;
         if (registrationRepo.existsByEmail(loginModel.getEmail()))
         {
 
@@ -93,14 +103,42 @@ public class AccountService {
             encryptor.setConfig(config);
             String pass = encryptor.decrypt(reg.getPassword());
 
+
+            String secret = "CJSSTECHNOLOGIES";
+
+
             if (loginModel.getPassword().equals(pass))
             {
-                return "Logged In";
+                String JWT = Jwts.builder()
+                        .setSubject(loginModel.getEmail())
+                        .setExpiration(new Date(System.currentTimeMillis() +EXPIRATION))
+                        .signWith(SignatureAlgorithm.HS512, secret)
+                        .compact();
+
+                String username = Jwts.parser()
+                        .setSigningKey(secret)
+                        .parseClaimsJws(JWT)
+                        .getBody()
+                        .getSubject();
+
+                Date expirationDate=Jwts.parser()
+                        .setSigningKey(secret)
+                        .parseClaimsJws(JWT)
+                        .getBody()
+                        .getExpiration();
+                Date date=new Date(System.currentTimeMillis()-EXPIRATION);
+
+                Instant issuedAt = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+                Instant expiration = issuedAt.plus(-3, ChronoUnit.MINUTES);
+
+                Instant expire = Instant.now().truncatedTo(ChronoUnit.SECONDS).plus(-3, ChronoUnit.MINUTES);
+
+                return ResponseEntity.status(HttpStatus.CREATED).body("Valid User");
             }
 
-            return "Please check your Password";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UnAuthorised User!!!");
 
         }
-        return "Please check your email Id";
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UnAuthorised User!!!");
     }
 }

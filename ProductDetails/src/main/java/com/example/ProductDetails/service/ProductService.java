@@ -29,12 +29,13 @@ public class ProductService
 
 
 
-        public ProductDetails addProduct(ProductDetailsModel productModel)
+        public String addProduct(ProductDetailsModel productModel)
         {
             ProductDetails details = new ProductDetails();
             details.setName(productModel.getName());
             details.setDescription(productModel.getDescription());
-            return productRepo.save(details);
+            productRepo.save(details);
+            return "Product Added";
         }
 
 

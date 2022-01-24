@@ -5,6 +5,7 @@ import com.example.Account.Service.model.LoginModel;
 import com.example.Account.Service.model.RegistrationModel;
 import com.example.Account.Service.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +24,7 @@ public class AccountController {
 
     }
     @PostMapping("/login")
-    public String login(@RequestBody LoginModel loginModel)
+    public ResponseEntity<String> login(@RequestBody LoginModel loginModel)
     {
         return accountService.login(loginModel);
     }
