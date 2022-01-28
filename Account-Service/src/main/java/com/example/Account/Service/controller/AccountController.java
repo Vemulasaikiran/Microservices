@@ -24,7 +24,7 @@ public class AccountController {
 
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginModel loginModel)
+    public String login(@Valid @RequestBody LoginModel loginModel)
     {
         return accountService.login(loginModel);
     }
